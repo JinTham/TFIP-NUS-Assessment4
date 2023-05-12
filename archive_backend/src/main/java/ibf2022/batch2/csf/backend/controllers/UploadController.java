@@ -1,5 +1,6 @@
 package ibf2022.batch2.csf.backend.controllers;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,7 +41,7 @@ public class UploadController {
 		@RequestPart String title,
 		@RequestPart String comments,
 		@RequestPart MultipartFile archive
-	) { 
+	) throws IOException { 
 		try {
 			List<String> imageUrlList = s3Svc.unzipAndUpload(archive, name, title, comments);
 			String bundleId = mongoSvc.archiveIntoMongo(imageUrlList, name, title, comments);

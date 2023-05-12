@@ -36,7 +36,7 @@ export class View1Component implements OnInit{
     const formVal = this.form.value;
     this.uploadFileSvc.upload(formVal, this.imageFile).then((result) => {
       this.bundleId = result;
-      console.log(this.bundleId);
+      console.log(this.bundleId)
       this.router.navigate(['/view2', this.bundleId.bundleId]);
     })
   }
