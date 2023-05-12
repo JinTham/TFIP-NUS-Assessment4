@@ -1,0 +1,40 @@
+<form [formGroup]="form" (ngSubmit)="processForm()">
+    <table>
+        <tr>
+            <td>Name: </td>
+            <td>
+                <input type="text" formControlName="name" placeholder="Name" size="31">
+            </td>
+            <td>
+                <span *ngIf="this.form.get('name')?.invalid && this.form.get('name')?.dirty">Mandatory field</span>
+            </td>
+        </tr>
+        <tr>
+            <td>Title: </td>
+            <td>
+                <input type="text" formControlName="title" placeholder="Title" size="31">
+            </td>
+            <td>
+                <span *ngIf="this.form.get('title')?.invalid && this.form.get('title')?.dirty">Mandatory field</span>
+            </td>
+        </tr>
+        <tr>
+            <td>Comments: </td>
+            <td>
+                <textarea cols="30" rows="10" formControlName="comments" placeholder="Your comments in here"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td>Archive: </td>
+            <td>
+                <input type="file" formControlName="archive" placeholder="ZIP archive of photots">
+            </td>
+            <td>
+                <span *ngIf="this.form.get('archive')?.invalid && this.form.get('archive')?.dirty">Mandatory field</span>
+            </td>
+        </tr>
+    </table>
+    <button type="button" [routerLink]="['/']">Cancel</button>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <button type="submit" [disabled]="form.invalid">Submit</button>
+</form>
