@@ -27,10 +27,7 @@
         <tr>
             <td>Archive: </td>
             <td>
-                <input type="file" formControlName="archive" placeholder="ZIP archive of photots">
-            </td>
-            <td>
-                <span *ngIf="this.form.get('archive')?.invalid && this.form.get('archive')?.dirty">Mandatory field</span>
+                <input type="file" placeholder="ZIP archive of photots" #file>
             </td>
         </tr>
     </table>

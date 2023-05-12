@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { ElementRef, Injectable } from '@angular/core';
 import { UploadFile } from '../models/uploadFile';
-import { lastValueFrom } from 'rxjs';
+import { firstValueFrom, lastValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,12 +10,14 @@ export class UploadFileService {
 
   constructor(private httpClient:HttpClient) { }
 
-  upload(uploadFile:UploadFile):Promise<any> {
+  upload(name:string, title:string, comments:string, zip:ElementRef) {
     const formData = new FormData()
-    formData.set("name",uploadFile['name'])
-    formData.set("title",uploadFile['title'])
-    formData.set("comments",uploadFile['comments'])
-    formData.set("arhive",uploadFile['archive'])
-    return lastValueFrom(this.httpClient.post<UploadFile>('/upload',formData))
+    formData.set("name",name)
+    formData.set("title",title)
+    formData.set("comments",comments)
+    formData.set("archive",zip.nativeElement.file[0])
+    console.log(formData.get('archive'))
+    const headers = new HttpHeaders().set("Content-Type","multipart/form-data")
+    return firstValueFrom(this.httpClient.post('/upload', formData, {headers:headers}))
   }
 }
