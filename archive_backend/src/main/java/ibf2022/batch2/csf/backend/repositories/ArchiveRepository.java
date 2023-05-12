@@ -3,7 +3,6 @@ package ibf2022.batch2.csf.backend.repositories;
 import java.util.List;
 import java.util.Optional;
 
-import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -50,9 +49,6 @@ public class ArchiveRepository {
 		if (bundles == null || bundles.size()<1) {
             return Optional.empty();
         }
-		String date = bundles.get(0).getDate();
-		bundles.get(0).setDate(date.substring(0, 10));
-		System.out.println(bundles.get(0).getDate());
         return Optional.of(bundles.get(0));
 	}
 
@@ -61,9 +57,13 @@ public class ArchiveRepository {
 	// Do not change the method's name
 	// Write the native mongo query that you will be using in this method
 	//
-	//
-	public Object getBundles(/* any number of parameters here */) {
-		return null;
+	// db.archives.find({})
+	public Optional<List<Bundle>> getBundles() {
+		List<Bundle> result = mongoTemplate.findAll(Bundle.class, MONGO_COLLECTION);
+        if (result == null || result.size()<1) {
+            return Optional.empty();
+        }
+        return Optional.of(result);
 	}
 
 

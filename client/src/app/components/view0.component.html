@@ -1,1 +1,8 @@
-<p>view0 works!</p>
+<h1>Photo Storage</h1>
+<button type="button" [routerLink]="['/view1']">Upload</button>
+<hr>
+<table>
+    <tr *ngFor="let bundle of bundles">
+        <td [routerLink]="['/view2',bundle.bundleId]">{{bundle.title}} ----- {{bundle.date}}</td>
+    </tr>
+</table>

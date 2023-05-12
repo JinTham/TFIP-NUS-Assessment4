@@ -32,4 +32,8 @@ public class MongoService {
         return this.archiveRepo.getBundleByBundleId(bundleId);
     }
 
+    public Optional<List<Bundle>> getAllBundles() {
+        return this.archiveRepo.getBundles();
+    }
+
 }

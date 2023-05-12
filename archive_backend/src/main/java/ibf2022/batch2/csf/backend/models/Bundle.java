@@ -75,7 +75,7 @@ public class Bundle {
         JsonArray urls = jarrBuilder.build();
         return Json.createObjectBuilder()
                     .add("bundleId",bundle.getBundleId())
-                    .add("date",bundle.getDate())
+                    .add("date",bundle.getDate().substring(0, 10))
                     .add("title",bundle.getTitle())
                     .add("name",bundle.getName())
                     .add("comments",bundle.getComments())

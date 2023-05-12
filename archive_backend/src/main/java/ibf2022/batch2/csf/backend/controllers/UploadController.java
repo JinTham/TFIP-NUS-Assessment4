@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.amazonaws.Response;
-
 import ibf2022.batch2.csf.backend.models.Bundle;
 import ibf2022.batch2.csf.backend.services.MongoService;
 import ibf2022.batch2.csf.backend.services.S3Service;
 import jakarta.json.Json;
+import jakarta.json.JsonArray;
+import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
 
 @Controller
@@ -66,7 +66,7 @@ public class UploadController {
 									.body("Bundle ID not found");
 			}
 			Bundle bundle = opt.get();
-			return ResponseEntity.status(HttpStatus.CREATED)
+			return ResponseEntity.status(HttpStatus.OK)
 								.contentType(MediaType.APPLICATION_JSON)
 								.body(Bundle.toJSON(bundle).toString());
 		} catch (Exception err) {
@@ -75,5 +75,27 @@ public class UploadController {
 	}
 
 	// TODO: Task 6
+	@GetMapping(path="/bundles")
+	public ResponseEntity<String> getAllBundles() {
+		try {
+			Optional<List<Bundle>> opt = mongoSvc.getAllBundles();
+			if (opt.isEmpty()){
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+									.contentType(MediaType.APPLICATION_JSON)
+									.body("No bundle found");
+			}
+			List<Bundle> bundles = opt.get();
+			JsonArrayBuilder jarrBuilder = Json.createArrayBuilder();
+			for (Bundle bundle : bundles) {
+				jarrBuilder.add(Bundle.toJSON(bundle));
+			}
+			JsonArray results = jarrBuilder.build();
+			return ResponseEntity.status(HttpStatus.OK)
+								.contentType(MediaType.APPLICATION_JSON)
+								.body(results.toString());
+		} catch (Exception err) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(err.getMessage());
+		}
+	}
 
 }

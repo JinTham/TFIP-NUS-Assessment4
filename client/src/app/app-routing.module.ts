@@ -5,8 +5,8 @@ import { View1Component } from './components/view1.component';
 import { View2Component } from './components/view2.component';
 
 const routes: Routes = [
-  {path:"view0", component:View0Component },
-  {path:"", component:View1Component },
+  {path:"", component:View0Component },
+  {path:"view1", component:View1Component },
   {path:"view2/:bundleId", component:View2Component },
   {path:"**",redirectTo:"/",pathMatch:'full'}
 ];

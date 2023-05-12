@@ -23,4 +23,8 @@ export class UploadFileService {
   getBundle(bundleId:string):Promise<any> {
     return lastValueFrom(this.httpClient.get<Bundle>('/bundle/'+bundleId))
   }
+
+  getAllBundles():Promise<any> {
+    return lastValueFrom(this.httpClient.get<Bundle[]>('/bundles'))
+  }
 }
