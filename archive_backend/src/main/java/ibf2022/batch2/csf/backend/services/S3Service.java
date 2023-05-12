@@ -42,6 +42,8 @@ public class S3Service {
         String contentType = "";
         switch (extension) {
             case "jpg":
+                contentType = "image/jpg";
+                break;
             case "jpeg":
                 contentType = "image/jpeg";
                 break;
