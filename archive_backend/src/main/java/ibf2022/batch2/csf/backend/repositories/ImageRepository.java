@@ -25,6 +25,10 @@ public class ImageRepository {
 	@Value("${DO_STORAGE_BUCKETNAME}")
     private String bucketName;
 
+	@Value("${DO_STORAGE_ENDPOINT}")
+    private String endpoint;
+
+
 	//TODO: Task 3
 	// You are free to change the parameter and the return type
 	// Do not change the method's name
@@ -45,7 +49,7 @@ public class ImageRepository {
         PutObjectRequest putRequest = new PutObjectRequest(bucketName, file.getOriginalFilename(), file.getInputStream(), metadata);
         putRequest.withCannedAcl(CannedAccessControlList.PublicRead);
         s3Client.putObject(putRequest);
-		return file.getOriginalFilename();
+		return "https://"+bucketName+"."+endpoint+"/"+file.getOriginalFilename();
 	}
 
 }

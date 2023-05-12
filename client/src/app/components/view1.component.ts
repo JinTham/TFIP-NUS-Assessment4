@@ -3,7 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UploadFileService } from '../services/upload-file.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { firstValueFrom, lastValueFrom } from 'rxjs';
-import { UploadFile } from '../models/uploadFile';
+import { Router } from '@angular/router';
+import { Bundle } from '../models/bundle';
 
 @Component({
   selector: 'app-view1',
@@ -13,9 +14,11 @@ import { UploadFile } from '../models/uploadFile';
 export class View1Component implements OnInit{
 
   form!:FormGroup
-  @ViewChild('file') imageFile!: ElementRef;
+  bundleId!:any
+  @ViewChild('file') 
+  imageFile!: ElementRef;
 
-  constructor(private fb:FormBuilder, private uploadFileSvc:UploadFileService, private httpClient:HttpClient){ }
+  constructor(private fb:FormBuilder, private uploadFileSvc:UploadFileService, private httpClient:HttpClient, private router:Router){ }
 
   ngOnInit(): void {
       this.form = this.createForm()
@@ -25,41 +28,17 @@ export class View1Component implements OnInit{
     return this.fb.group({
       name:this.fb.control('',Validators.required),
       title:this.fb.control('',Validators.required),
-      comments:this.fb.control(''),
-      'image-file':this.fb.control('')
+      comments:this.fb.control('')
     })
   }
 
   processForm() {
-    const formData = new FormData()
-    formData.set("name",this.form.value['name'])
-    // formData.set("title",this.form.value['title'])
-    // formData.set("comments",this.form.value['comments'])
-    // formData.set('archive', this.imageFile.nativeElement.files[0])
-    // console.log(formData.get("name"))
-    // console.log(formData.get("title"))
-    // console.log(formData.get("comments"))
-    // console.log(formData.get("archive"))
-    // const uploadFile = this.form.value
-    // console.log(uploadFile)
-    
-    // formData.set("name",uploadFile['name'])
-    // formData.set("title",uploadFile['title'])
-    // formData.set("comments",uploadFile['comments'])
-    // formData.set('archive', this.imageFile.nativeElement.files[0])
-    const headers = new HttpHeaders().set("Content-Type","multipart/form-data; boundary=----0YsU72sGdwPe5B")
-    return firstValueFrom(this.httpClient.post<UploadFile>('/upload', formData, {headers:headers}))
+    const formVal = this.form.value;
+    this.uploadFileSvc.upload(formVal, this.imageFile).then((result) => {
+      this.bundleId = result;
+      console.log(this.bundleId);
+      this.router.navigate(['/view2', this.bundleId.bundleId]);
+    })
   }
-
-  // upload(name:string, title:string, comments:string, zip:ElementRef) {
-  //   const formData = new FormData()
-  //   formData.set("name",name)
-  //   formData.set("title",title)
-  //   formData.set("comments",comments)
-  //   formData.set("archive",zip.nativeElement.files[0])
-  //   console.log(formData.get('archive'))
-  //   const headers = new HttpHeaders().set("Content-Type","multipart/form-data")
-  //   return firstValueFrom(this.httpClient.post('/upload', formData, {headers:headers}))
-  // }
 
 }

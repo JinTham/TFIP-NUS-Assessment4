@@ -1,1 +1,10 @@
-<p>view2 works!</p>
+<h2>{{bundle.title}}</h2>
+<br>
+<h3>by {{bundle.name}} on {{bundle.date}}</h3>
+<br>
+<p>{{bundle.comments}}</p>
+<div *ngFor="let image of bundle.urls">
+    <img src="{{image}}">
+    <br>
+</div>
+<button type="button" [routerLink]="['/']">Back</button>

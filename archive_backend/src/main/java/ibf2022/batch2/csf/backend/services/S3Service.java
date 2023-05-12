@@ -1,6 +1,7 @@
 package ibf2022.batch2.csf.backend.services;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -20,19 +21,19 @@ public class S3Service {
     @Autowired
     private ImageRepository imageRepo;
     
-    public List<String> unzipAndUpload(MultipartFile file, String name, String title, String comments) throws IOException {
-        List<String> imageList = new LinkedList<>();
-        ZipInputStream zipIn = new ZipInputStream(file.getInputStream());
+    public List<String> unzipAndUpload(MultipartFile zipFile, String name, String title, String comments) throws IOException {
+        List<String> imageUrlList = new LinkedList<>();
+        InputStream is = zipFile.getInputStream();
+        ZipInputStream zipIn = new ZipInputStream(is);
         ZipEntry entry = zipIn.getNextEntry();
         while (entry != null) {
-            System.out.println(entry);
             MultipartFile multipartFile = this.convert(entry, zipIn);
-            String image = imageRepo.upload(multipartFile, name, title, comments);
-            imageList.add(image);
+            String imageUrl = imageRepo.upload(multipartFile, name, title, comments);
+            imageUrlList.add(imageUrl);
             zipIn.closeEntry();
             entry = zipIn.getNextEntry();
         }
-        return imageList;
+        return imageUrlList;
     }
 
     public MultipartFile convert(ZipEntry zipEntry, ZipInputStream zipInputStream) throws IOException {
@@ -52,6 +53,7 @@ public class S3Service {
                 break;
         }
         byte[] bytes = new byte[(int) zipEntry.getSize()];
+        zipInputStream.read(bytes);
         return new CustomMultipartFile(zipEntry.getName(), zipEntry.getName(),
                 contentType, bytes);
     }
