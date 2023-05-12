@@ -13,7 +13,6 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.model.PutObjectResult;
 
 import ibf2022.batch2.csf.backend.repositories.ImageRepository;
 
@@ -45,7 +44,7 @@ public class ImageRepository {
         // Use metadata and key to create PutObjectRequest
         PutObjectRequest putRequest = new PutObjectRequest(bucketName, file.getOriginalFilename(), file.getInputStream(), metadata);
         putRequest.withCannedAcl(CannedAccessControlList.PublicRead);
-        PutObjectResult result = s3Client.putObject(putRequest);
+        s3Client.putObject(putRequest);
 		return file.getOriginalFilename();
 	}
 
