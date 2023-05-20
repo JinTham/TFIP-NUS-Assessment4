@@ -1,5 +1,7 @@
 package ibf2022.batch2.csf.backend.services;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.LinkedList;
@@ -55,9 +57,14 @@ public class S3Service {
                 break;
         }
         byte[] bytes = new byte[(int) zipEntry.getSize()];
-        zipInputStream.read(bytes);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		int len;
+        while ((len = zipInputStream.read(bytes)) > 0) {
+            baos.write(bytes, 0, len);
+        }
+        byte[] data = baos.toByteArray();
         return new CustomMultipartFile(zipEntry.getName(), zipEntry.getName(),
-                contentType, bytes);
+                contentType, data);
     }
 
 }

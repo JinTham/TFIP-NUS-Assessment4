@@ -1,5 +1,6 @@
 package ibf2022.batch2.csf.backend.repositories;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -46,7 +47,7 @@ public class ImageRepository {
         metadata.setContentLength(file.getSize());
         metadata.setUserMetadata(userData);  
         // Use metadata and key to create PutObjectRequest
-        PutObjectRequest putRequest = new PutObjectRequest(bucketName, file.getOriginalFilename(), file.getInputStream(), metadata);
+        PutObjectRequest putRequest = new PutObjectRequest(bucketName, file.getOriginalFilename(), new ByteArrayInputStream(file.getBytes()), metadata);
         putRequest.withCannedAcl(CannedAccessControlList.PublicRead);
         s3Client.putObject(putRequest);
 		return "https://"+bucketName+"."+endpoint+"/"+file.getOriginalFilename();
